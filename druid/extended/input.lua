@@ -169,6 +169,8 @@ function Input.on_input(self, action_id, action)
 			if not string.match(hex, "EF9C8[0-3]") then
 				if not self.allowed_characters or action.text:match(self.allowed_characters) then
 					input_text = self.value .. action.text
+					print(action.text)
+					print(hex)
 					if self.max_length then
 						input_text = utf8.sub(input_text, 1, self.max_length)
 					end
