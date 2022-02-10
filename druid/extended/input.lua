@@ -1,3 +1,5 @@
+-- Copyright (c) 2021 Maxim Tuprikov <insality@gmail.com>. This code is licensed under MIT license
+
 --- Druid input text component.
 -- Carry on user text input
 -- @author Part of code from Britzl gooey input component
@@ -8,7 +10,7 @@
 --- On input field select callback(self, button_node)
 -- @tfield druid_event on_input_select
 
---- On input field unselect callback(self, button_node)
+--- On input field unselect callback(self, input_text)
 -- @tfield druid_event on_input_unselect
 
 --- On input field text change callback(self, input_text)
@@ -51,7 +53,7 @@ local const = require("druid.const")
 local component = require("druid.component")
 local utf8 = require("druid.system.utf8")
 
-local Input = component.create("input", { component.ON_INPUT, component.ON_FOCUS_LOST })
+local Input = component.create("input")
 
 
 --- Mask text by replacing every character with a mask character
@@ -163,10 +165,8 @@ function Input.on_input(self, action_id, action)
 				return string.format("%02X%s",string.byte(c), "")
 			end)
 
-			print(hex)
 			-- ignore arrow keys
 			if not utf8.match(hex, "EF9C8[0-3]") then
-			print(action.text)
 				if not self.allowed_characters or utf8.match(action.text, self.allowed_characters) then
 					input_text = self.value .. action.text
 					if self.max_length then
@@ -307,7 +307,7 @@ function Input.unselect(self)
 		self.is_selected = false
 
 		gui.hide_keyboard()
-		self.on_input_unselect:trigger(self:get_context())
+		self.on_input_unselect:trigger(self:get_context(), self:get_text())
 
 		self.style.on_unselect(self, self.button.node)
 	end
